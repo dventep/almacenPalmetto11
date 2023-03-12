@@ -35,3 +35,12 @@
     </div>
     <input type="email" class="form-control" name="emailUser" id="emailUser" value="{{ user.email }}">
 </div>
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">¿Es admin?</span>
+    </div>
+    <select class="form-control" name="is_adminUser" id="is_adminUser">
+      <option value="1" {% if user.is_admin == 1 %}selected{% endif %}>Sí</option>
+      <option value="0" {% if user.is_admin != 1 %}selected{% endif %}>No</option>
+    </select>
+</div>

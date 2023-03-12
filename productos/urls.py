@@ -6,5 +6,7 @@ urlpatterns = [
     path('goToProduct/', views.goToProduct),
     path('createProduct/', views.createProduct),
     path('putProduct/', views.putProduct),
-    path('deleteProduct/', views.deleteProduct),
+    path('addProductCar/', views.addProductCar),
+    path('deleteCar/', views.deleteProductCar),
+    # path('deleteProduct/', views.deleteProduct),
 ]

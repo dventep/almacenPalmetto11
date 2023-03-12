@@ -3,7 +3,10 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.http import HttpResponse, JsonResponse
 import requests
-# Create your views here.
+
+# SERVER_IP = "localhost"
+SERVER_IP = "192.168.100.2"
+
 def make_request_get(url, params={}):
     if params:
         response = requests.get("{}/{}" .format(url, "/".join(params)))
@@ -20,7 +23,8 @@ def make_request_post(url, params={}):
     else:
         return False
     if response.status_code == 200:
-        return response.json()
+        # return response.json()
+        return True
     else:
         return False
     
@@ -38,7 +42,7 @@ def make_request_put(url, params={}):
     else:
         return False
     if response.status_code == 200:
-        return response.json()
+        return True
     else:
         return False
 
@@ -48,8 +52,10 @@ def home(request):
         Description
             Esta función trae todos los productos.
     """
+    
     if 'login' in request.session:
-        request_to_api = make_request_get("http://192.168.100.2:3000/productos")
+        print('lista_carrito', request.session['login'])
+        request_to_api = make_request_get(f"http://{SERVER_IP}:3002/productos")
         productos_list = []
         if request_to_api:
             productos_list = request_to_api
@@ -64,15 +70,22 @@ def getProduct(request):
             Esta función trae todos los productos.
     """
     product_info = {}
+    content_return = {'product':product_info, 'disabled':'disabled'}
     if 'login' in request.session:
         if 'edit_product_' in request.POST['id'] and len(request.POST['id'].split('edit_product_')) > 0:
             id_to_send = (request.POST['id'].split('edit_product_'))[1]
-            request_to_api = make_request_get(f"http://192.168.100.2:3000/productos/{id_to_send}")
+            request_to_api = make_request_get(f"http://{SERVER_IP}:3002/productos/{id_to_send}")
             if request_to_api:
                 product_info = request_to_api
+        elif 'add_product_' in request.POST['id'] and len(request.POST['id'].split('add_product_')) > 0:
+            id_to_send = (request.POST['id'].split('add_product_'))[1]
+            request_to_api = make_request_get(f"http://{SERVER_IP}:3002/productos/{id_to_send}")
+            if request_to_api:
+                product_info = request_to_api
+                content_return['addproduct'] = {'quantity':0}
+    content_return['product'] = product_info
         # if request_to_api:
         #     product_info = request_to_api
-    content_return = {'product':product_info}
     html = render_to_string("base/formProduct.html", content_return)
     return HttpResponse(html)
     
@@ -101,8 +114,7 @@ def createProduct(request):
                 'precio': request.POST.get('price_product'),
                 'inventario': request.POST.get('inventory_product')
             }
-            print('to_send',json_to_send)
-            request_to_api = make_request_post("http://192.168.100.2:3000/productos", json_to_send)
+            request_to_api = make_request_post(f"http://{SERVER_IP}:3002/productos", json_to_send)
             if not request_to_api:
                 content_return['error'].append('Durante el proceso surgió un error.')
         else:
@@ -118,6 +130,7 @@ def putProduct(request):
     content_return = {'error':[]}
     if 'login' in request.session:
         if request.POST.get('id', False):
+            print(request.POST)
             json_to_send = {
                 'id': request.POST.get('id'),
                 'nombre': request.POST.get('name_product'),
@@ -125,32 +138,50 @@ def putProduct(request):
                 'precio': request.POST.get('price_product'),
                 'inventario': request.POST.get('inventory_product')
             }
-            request_to_api = make_request_put("http://192.168.100.2:3000/productos/{}" .format(request.POST.get('id')), json_to_send)
+            request_to_api = make_request_put("http://{}:3002/productos/{}" .format(SERVER_IP, request.POST.get('id')), json_to_send)
             if not request_to_api:
                 content_return['error'].append('Durante el proceso surgió un error.')
         else:
             content_return['error'].append('No se recibió el ID adecuado.')
     return JsonResponse(content_return, safe=False)
-    
-def deleteProduct(request):
+
+def addProductCar(request):
     """
         ----------
         Description
-            Esta función elimina el producto enviado.
+            Esta función añade productos al carro.
     """
     content_return = {'error':[]}
     if 'login' in request.session:
-        if 'delete_product_' in request.POST['id'] and len(request.POST['id'].split('delete_product_')) > 0:
-            id_to_send = (request.POST['id'].split('delete_product_'))[1]
-            request_to_api = make_request_delete(f"http://192.168.100.2:3000/productos/{id_to_send}")
-            if not request_to_api:
-                content_return['error'].append('Durante el proceso surgió un error.')
+        if request.POST.get('id', False):
+            print(request.POST)
+            request.session['carrito'] = request.session['carrito'] + 1
+            request.session['lista_carrito'].append(
+                {
+                    'id': request.POST.get('id'),
+                    'nombre': request.POST.get('name_product'),
+                    'cantidad': request.POST.get('quantity_product')
+                }
+            )
+            print('lista_carrito', request.session['lista_carrito'])
+            # print('lista_carrito', request.session)
         else:
             content_return['error'].append('No se recibió el ID adecuado.')
-        # request_to_api = make_request_delete("http://192.168.100.2:3000/productos")
-        # productos_list = []
-        # if request_to_api:
-        #     productos_list = request_to_api
-        pass
     return JsonResponse(content_return, safe=False)
-        
+
+def deleteProductCar (request):
+    """
+        ----------
+        Description
+            Esta función elimina el producto del carrito.
+    """
+    content_return = {'error':[]}
+    if 'login' in request.session:
+        if request.POST.get('id', False):
+            value_id = int(request.POST['id'].split("delete_car_")[1])
+            request.session['carrito'] = request.session['carrito'] - 1
+            if len(request.session['lista_carrito']) >= value_id:
+                del request.session['lista_carrito'][value_id]
+            else:
+                print('Carro no eliminado')
+    return JsonResponse(content_return, safe=False)

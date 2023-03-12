@@ -3,23 +3,33 @@
     <div class="input-group-prepend">
       <span class="input-group-text">Nombre</span>
     </div>
-    <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="nameProduct" id="nameProduct" value="{{ product.nombre }}">
+    <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="nameProduct" id="nameProduct" value="{{ product.nombre }}" {{ disabled }}>
 </div>
 <div class="input-group mb-3">
     <div class="input-group-prepend">
       <span class="input-group-text">Descripción</span>
     </div>
-    <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="descripcionProduct" id="descripcionProduct" value="{{ product.descripcion }}">
+    <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="descripcionProduct" id="descripcionProduct" value="{{ product.descripcion }}" {{ disabled }}>
 </div>
 <div class="input-group mb-3">
     <div class="input-group-prepend">
       <span class="input-group-text">$</span>
     </div>
-    <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)" name="priceProduct" id="priceProduct" value="{{ product.precio }}">
+    <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)" name="priceProduct" id="priceProduct" value="{{ product.precio }}" {{ disabled }}>
 </div>
-<div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text">Cantidad</span>
-    </div>
-    <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)" name="inventoryProduct" id="inventoryProduct" value="{{ product.inventario }}">
-</div>
+{% if addproduct %}
+  <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Cantidad a pedir</span>
+      </div>
+      <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)" name="quantityProduct" id="quantityProduct" value="{{ addproduct.quantity }}">
+      <input type="hidden" class="form-control" aria-label="Amount (to the nearest dollar)" name="inventoryProduct" id="inventoryProduct" value="{{ product.inventario }}">
+  </div>
+{% else %}
+  <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Cantidad</span>
+      </div>
+      <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)" name="inventoryProduct" id="inventoryProduct" value="{{ product.inventario }}">
+  </div>
+{% endif %}

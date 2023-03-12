@@ -21,13 +21,11 @@
                       <li class="list-group-item bg-dark text-light text-center">Contraseña: {{ user.password }}</li>
                       <li class="list-group-item bg-dark text-light text-center">Tel: {{ user.telefono }}</li>
                       <li class="list-group-item bg-dark text-light text-center">Email: {{ user.email }}</li>
+                      <li class="list-group-item bg-dark text-light text-center">¿Es admin?: {% if user.is_admin %}Sí{% else %}No{% endif %}</li>
                   </ul>
                 <div class="card-body d-flex justify-content-center align-center container-actions">
                     <div id="edit_user_{{user.id}}" class="text-info font-weight-bold edit_user">
                         Editar
-                    </div>
-                    <div id="delete_user_{{user.id}}" class="text-danger font-weight-bold delete_user">
-                        Eliminar
                     </div>
                 </div>
               </div>

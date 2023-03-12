@@ -24,7 +24,7 @@ $(document).ready(function() {
         return errorsReport
     };
     $('#goToUser').click(function() {
-       $.ajax({
+        $.ajax({
             type: "POST",
             url: "/usuarios/goToUser/",
             data: {csrfmiddlewaretoken:csrftoken},
@@ -49,12 +49,13 @@ $(document).ready(function() {
         const passwordUser = $("#passwordUser").val();
         const telephoneUser = $("#telephoneUser").val();
         const emailUser = $("#emailUser").val();
+        const is_adminUser = $("#is_adminUser").val();
         errorsReport = validateFields(errorsReport, nameUser, lastnameUser, userUser, passwordUser, telephoneUser, emailUser)
         if (errorsReport.length === 0) {
             $.ajax({
                 type: "POST",
                 url: "/usuarios/createUser/",
-                data: {csrfmiddlewaretoken:csrftoken, name_user: nameUser, lastname_user: lastnameUser, user_user: userUser, password_user: passwordUser, telephone_user: telephoneUser, email_user: emailUser},
+                data: {csrfmiddlewaretoken:csrftoken, name_user: nameUser, lastname_user: lastnameUser, user_user: userUser, password_user: passwordUser, telephone_user: telephoneUser, email_user: emailUser, is_admin_user: is_adminUser},
                 async : false,
                 complete: function(response) {
                     if (response.responseJSON !== undefined && response.responseJSON['error'] && Array.isArray(response.responseJSON['error'])) {
@@ -106,6 +107,7 @@ $(document).ready(function() {
         const passwordUser = $("#passwordUser").val();
         const telephoneUser = $("#telephoneUser").val();
         const emailUser = $("#emailUser").val();
+        const is_adminUser = $("#is_adminUser").val();
         if (idUser === undefined || idUser === "") {
             errorsReport += "El ID no esta definido, vuelve a seleccionar el usero.\n"
         }
@@ -114,7 +116,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: "/usuarios/putUser/",
-                data: {csrfmiddlewaretoken:csrftoken, id:idUser, name_user: nameUser, lastname_user: lastnameUser, user_user: userUser, password_user: passwordUser, telephone_user: telephoneUser, email_user: emailUser},
+                data: {csrfmiddlewaretoken:csrftoken, id:idUser, name_user: nameUser, lastname_user: lastnameUser, user_user: userUser, password_user: passwordUser, telephone_user: telephoneUser, email_user: emailUser, is_admin_user: is_adminUser},
                 async : false,
                 complete: function(response) {
                     if (response.responseJSON !== undefined && response.responseJSON['error'] && Array.isArray(response.responseJSON['error'])) {
@@ -137,31 +139,5 @@ $(document).ready(function() {
             $("#errorsReport").html(errorsReport);
             $("#alertUser").show();
         }
-    });
-    $('.delete_user').click(function() {
-        let value_id = $(this).attr("id");
-       $.ajax({
-            type: "POST",
-            url: "/usuarios/deleteUser/",
-            data: {csrfmiddlewaretoken:csrftoken, id:value_id},
-            async : false,
-            complete: function(response) {
-                if (response.responseJSON !== undefined && response.responseJSON['error'] && Array.isArray(response.responseJSON['error'])) {
-                    if (response.responseJSON['error'] && response.responseJSON['error'].length !== 0) {
-                        response.responseJSON['error'].forEach(function (text) {
-                            errorsReport += text
-                            console.log(text)
-                        })
-                        $("#errorsReport").html(errorsReport);
-                        $("#alertUser").show();
-                    } else {
-                        window.location.reload();
-                    }
-                }
-            },
-            error: function() {
-                console.error('Ha ocurrido un error');
-            }
-        });
     });
 });

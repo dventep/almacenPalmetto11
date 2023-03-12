@@ -1,7 +1,7 @@
 .container-products {
     gap:2vw;
 }
-.edit_product, .delete_product{
+.edit_product, .delete_product, .add_product, .delete_car{
     cursor:pointer
 }
 .edit_product:hover, .delete_product:hover {

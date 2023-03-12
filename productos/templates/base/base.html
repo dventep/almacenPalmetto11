@@ -35,6 +35,9 @@
                   <button type="button" class="btn btn-success" style="display:none;" id="createProduct">Crear registro</button>
                   <button type="button" class="btn btn-success" style="display:none;" id="saveChangesUser">Guardar cambios</button>
                   <button type="button" class="btn btn-success" style="display:none;" id="createUser">Crear registro</button>
+                  <button type="button" class="btn btn-success" style="display:none;" id="saveChangesOrder">Guardar cambios</button>
+                  <button type="button" class="btn btn-success" style="display:none;" id="createOrder">Crear registro</button>
+                  <button type="button" class="btn btn-success" style="display:none;" id="addProductCar">Añadir</button>
                 </div>
               </div>
             </div>
@@ -49,9 +52,18 @@
                             <li class="nav-item nav-li-contained px-3 {% if '/' == request.path %}actived{% endif %}">
                                 <a class="nav-link" href="/">Productos</a>
                             </li>
-                            <li class="nav-item nav-li-contained px-3 {% if '/usuarios/lista' in request.path %}actived{% endif %}">
-                                <a class="nav-link" href="/usuarios/lista">Usuarios</a>
-                            </li>
+                            {% if request.session.login.is_admin %}
+                                <li class="nav-item nav-li-contained px-3 {% if '/usuarios/lista' in request.path %}actived{% endif %}">
+                                    <a class="nav-link" href="/usuarios/lista">Usuarios</a>
+                                </li>
+                                <li class="nav-item nav-li-contained px-3 {% if '/ordenes' in request.path %}actived{% endif %}">
+                                    <a class="nav-link" href="/ordenes">Ordenes</a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item nav-li-contained px-3 {% if '/ordenes/carrito' in request.path %}actived{% endif %}">
+                                    <a id="aNumberCarrito" class="nav-link" href="/ordenes/carrito">Carrito ({{ request.session.carrito }})</a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                     <div class="col-3 text-light d-flex flex-dirección-row about-user">

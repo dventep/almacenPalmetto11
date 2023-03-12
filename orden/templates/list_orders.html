@@ -1,0 +1,27 @@
+{% extends './base/base.html' %}
+{% load static %}
+
+{% block title %}Ordenes - GuaAdis{% endblock %}
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'order.css' %}">
+{% endblock %}
+{% block content %}
+    <h1>Ordenes</h1>
+        <!-- <button id="goToOrder" type="button" class="btn btn-primary btn-sm">Crear registro</button> -->
+    <div class="d-flex justify-content-center align-center flex-direction-row flex-wrap container-orders w-100">
+        {% for order in orders %}
+            <!-- <li>{{ order.nombre }} - {{ order.descripcion }} - {{ order.precio }}</li> -->
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Cliente: #{{order.id}} - {{order.nombreCliente.title }}</h5>
+                  </div>
+                  <ul class="list-group list-group-flush bg-dark">
+                      <li class="list-group-item bg-dark text-light text-center">Email cliente: {{ order.emailCliente }}</li>
+                      <li class="list-group-item bg-dark text-light text-center">Total cuenta: {{ order.totalCuenta }}</li>
+                      <li class="list-group-item bg-dark text-light text-center">Fecha: {{ order.fecha }}</li>
+                  </ul>
+              </div>
+        {% endfor %}
+    </div>
+    <script src="{% static 'order.js' %}"></script>
+{% endblock %}

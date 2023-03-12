@@ -9,5 +9,5 @@ urlpatterns = [
     path('goToUser/', views.goToUser),
     path('createUser/', views.createUser),
     path('putUser/', views.putUser),
-    path('deleteUser/', views.deleteUser),
+    # path('deleteUser/', views.deleteUser),
 ]

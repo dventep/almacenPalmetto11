@@ -1,0 +1,9 @@
+.container-orders {
+    gap:2vw;
+}
+.edit_order, .delete_order{
+    cursor:pointer
+}
+.edit_order:hover, .delete_order:hover {
+    font-style:italic ;
+}
