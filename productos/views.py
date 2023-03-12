@@ -30,7 +30,6 @@ def make_request_post(url, params={}):
     
 def make_request_delete(url):
     response = requests.delete(url)
-    # print(response)
     if response.status_code == 200:
         return True
     else:
@@ -54,7 +53,6 @@ def home(request):
     """
     
     if 'login' in request.session:
-        print('lista_carrito', request.session['login'])
         request_to_api = make_request_get(f"http://{SERVER_IP}:3002/productos")
         productos_list = []
         if request_to_api:
@@ -130,7 +128,6 @@ def putProduct(request):
     content_return = {'error':[]}
     if 'login' in request.session:
         if request.POST.get('id', False):
-            print(request.POST)
             json_to_send = {
                 'id': request.POST.get('id'),
                 'nombre': request.POST.get('name_product'),
@@ -154,7 +151,6 @@ def addProductCar(request):
     content_return = {'error':[]}
     if 'login' in request.session:
         if request.POST.get('id', False):
-            print(request.POST)
             request.session['carrito'] = request.session['carrito'] + 1
             request.session['lista_carrito'].append(
                 {
@@ -163,8 +159,6 @@ def addProductCar(request):
                     'cantidad': request.POST.get('quantity_product')
                 }
             )
-            print('lista_carrito', request.session['lista_carrito'])
-            # print('lista_carrito', request.session)
         else:
             content_return['error'].append('No se recibió el ID adecuado.')
     return JsonResponse(content_return, safe=False)

@@ -29,7 +29,6 @@ def make_request_post(url, params={}):
     
 def make_request_delete(url):
     response = requests.delete(url)
-    # print(response)
     if response.status_code == 200:
         return True
     else:
@@ -122,7 +121,6 @@ def getUser(request):
         # if request_to_api:
         #     user_info = request_to_api
     content_return = {'user':user_info}
-    print(content_return)
     html = render_to_string("base/formUser.html", content_return)
     return HttpResponse(html)
     
@@ -154,7 +152,6 @@ def createUser(request):
                 'email': request.POST.get('email_user'),
                 'is_admin': request.POST.get('is_admin_user'),
             }
-            print('to_send',json_to_send)
             request_to_api = make_request_post(f"http://{SERVER_IP}:3001/usuarios", json_to_send)
             if not request_to_api:
                 content_return['error'].append('Durante el proceso surgió un error.')
@@ -181,13 +178,11 @@ def putUser(request):
                 'email': request.POST.get('email_user'),
                 'is_admin': request.POST.get('is_admin_user')
             }
-            print(json_to_send)
             request_to_api = make_request_put("http://{}:3001/usuarios/{}" .format(SERVER_IP, request.POST.get('id')), json_to_send)
             if not request_to_api:
                 content_return['error'].append('Durante el proceso surgió un error.')
         else:
             content_return['error'].append('No se recibió el ID adecuado.')
-        print(content_return)
     return JsonResponse(content_return, safe=False)
     
 def deleteUser(request):

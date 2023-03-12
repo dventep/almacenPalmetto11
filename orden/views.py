@@ -30,7 +30,6 @@ def make_request_post(url, params={}):
     
 def make_request_delete(url):
     response = requests.delete(url)
-    # print(response)
     if response.status_code == 200:
         return True
     else:
