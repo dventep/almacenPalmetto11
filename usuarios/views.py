@@ -26,14 +26,7 @@ def make_request_post(url, params={}):
         return True
     else:
         return False
-    
-def make_request_delete(url):
-    response = requests.delete(url)
-    if response.status_code == 200:
-        return True
-    else:
-        return False
-    
+        
 def make_request_put(url, params={}):
     if params:
         response = requests.put(url, json=params, headers = {'Content-Type': "application/json", 'Accept': "application/json"})
@@ -183,27 +176,5 @@ def putUser(request):
                 content_return['error'].append('Durante el proceso surgió un error.')
         else:
             content_return['error'].append('No se recibió el ID adecuado.')
-    return JsonResponse(content_return, safe=False)
-    
-def deleteUser(request):
-    """
-        ----------
-        Description
-            Esta función elimina el usero enviado.
-    """
-    content_return = {'error':[]}
-    if 'login' in request.session:
-        if 'delete_user_' in request.POST['id'] and len(request.POST['id'].split('delete_user_')) > 0:
-            id_to_send = (request.POST['id'].split('delete_user_'))[1]
-            request_to_api = make_request_delete(f"http://{SERVER_IP}:3001/usuarios/{id_to_send}")
-            if not request_to_api:
-                content_return['error'].append('Durante el proceso surgió un error.')
-        else:
-            content_return['error'].append('No se recibió el ID adecuado.')
-        # request_to_api = make_request_delete(f"http://{SERVER_IP}:3001/usuarios")
-        # useros_list = []
-        # if request_to_api:
-        #     useros_list = request_to_api
-        pass
     return JsonResponse(content_return, safe=False)
         
