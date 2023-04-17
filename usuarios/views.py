@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 import traceback
 import requests
 
-# SERVER_IP = "localhost}"
+#SERVER_IP = "storage_users_micro"
 SERVER_IP = "192.168.100.2"
 
 def make_request_get(url, params=False):

@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.http import HttpResponse, JsonResponse
 import requests
 
-# SERVER_IP = "localhost"
+#SERVER_IP = "storage_products_micro"
 SERVER_IP = "192.168.100.2"
 
 def make_request_get(url, params={}):
